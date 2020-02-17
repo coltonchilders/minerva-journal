@@ -1,0 +1,132 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ /* General tag selectors */
+
+ html, body, p {
+     margin: 0;
+     width:  100%;
+     font-family: 'Raleway', sans-serif;
+ }
+
+ a {
+    color: #6C5B7B;
+    text-decoration: none !important;
+ }
+
+ a:hover {
+   color: #F8B195;
+ }
+
+ body {
+     background-color: #eee;
+ }
+
+ h1 {
+     font-size: 24px;
+ }
+
+
+ button {
+     background-color: #f2580b;
+     border: none;
+     color: #fff;
+     cursor: pointer;
+     font-size: 14px;
+     margin-top: 10px;
+     padding: 12px 24px;
+     transition: background-color 0.5s;
+ }
+
+ button:hover {
+     background-color: #c24609;
+     transition: background-color 0.5s;
+ }
+
+ form label {
+     display: block;
+     font-size: 24pt;
+     width: 100%;
+ }
+
+ form textarea {
+     border: 1px solid transparent;
+     font-size: 14px;
+     font-weight: 300;
+     margin: 20px 0 10px;
+     min-height: 100px;
+     padding: 16px;
+     transition: border 0.5s;
+     width: calc(100% - 32px);
+     font-size: 20px;
+ }
+
+ form textarea:focus {
+     border: 1px solid #0084d7;
+     box-shadow: 0;
+     outline: 0;
+     transition: border 0.5s;
+     font-size: 20px;
+ }
+
+ /* class selectors */
+ .header {
+     background-color: #355C7D;
+     box-shadow: 10px 2px 5px rgba(0,0,0,0.15);
+     height: 100px;
+     text-align: center;
+     width: 100%;
+
+ }
+
+ .header i {
+     margin: 15px 0 0;
+     width: 60px;
+     height: 60px;
+     text-align: center;
+ }
+
+ .header .container {
+     text-align: center;
+ }
+
+ .fa {
+     width: 60px;
+     height: 60px;
+     color: white;
+ }
+
+ .short-intro {
+     text-align: center;
+     margin-top: 100px;
+ }
+
+ .intro h1 {
+     font-size: 30pt;
+ }
+
+ .intro {
+     font-size: 18pt;
+     background: white;
+     padding: 12px 24px 48px 24px;
+     margin: 50px 50px;
+ }
+
+ .footer {
+     text-align: center;
+     margin: auto;
+     padding: 0 15px 0 15px;
+ }

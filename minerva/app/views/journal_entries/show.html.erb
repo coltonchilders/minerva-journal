@@ -1,0 +1,45 @@
+<script src="https://kit.fontawesome.com/d4515c3dae.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+
+<div class="container-fluid header">
+  <div class="col-md-12">
+      <a href="/home">
+        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
+        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+    </a>
+  </div>
+</div>
+
+<div class="container-fluid">
+    <div class="back">
+      <%= link_to journal_path(id: @journal.id) do %>
+        <i class="fas fa-chevron-left"></i>
+        Back to <%= @journal.name %>
+      <% end %>
+    </div>
+    <div class="row entry">
+      <h1><%= @journal_entry.title %></h1>
+  	  <p><%= @journal_entry.body %></p>
+      <div class="actions edit">
+        <%= link_to edit_journal_journal_entry_path(id: @journal_entry.id, journal_id: @journal_entry.journal_id) do %>
+          <i class="fas fa-edit"></i>
+        <% end %>
+      </div>
+      <div class="actions delete">
+        <%= link_to "#{@journal_entry.id}", :method => 'delete', data: {confirm: "Are you sure?"} do %>
+          <i class="fas fa-trash"></i>
+        <% end %>
+      </div>
+      <p class="time">Created: <%= @journal_entry.created_at.to_time.strftime('%B %e at %l:%M %p') %></p>
+      <% if @journal_entry.edited %>
+        <p class="time">Updated: <%= @journal_entry.updated_at.to_time.strftime('%B %e at %l:%M %p') %></p>
+      <% end %>
+    </div>
+    <div class="row footer">
+        <div class="col-md-12">
+            <div class="short-intro">
+                <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<script src="https://kit.fontawesome.com/d4515c3dae.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+
+<div class="container-fluid header">
+  <div class="col-md-12">
+      <a href="/home">
+        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
+        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+    </a>
+  </div>
+</div>
+
+<div class="container-fluid create">
+  <div class="row title-bar">
+    <div class="title">
+      New Entry
+    </div>
+  </div>
+    <div class="row">
+      <%= form_for :journal_entries, :url => {:action => "create", :id => @journal_entry}, local: true do |form| %>
+        <div class="col-md-12 field">
+          <%= form.label :title %>
+          <%= form.text_field :title %><br><br>
+
+          <%= form.label :body %>
+          <%= form.text_area :body %><br><br>
+
+          <%= form.hidden_field :journal_id, :value => @journal_id %>
+          <%= form.hidden_field :edited, :value => false %>
+        </div>
+        <div class="col-md-12 actions create-btn">
+          <%= form.submit "Create" %>
+        </div>
+      <% end %>
+    </div>
+   <div class="row footer">
+       <div class="col-md-12">
+           <div class="short-intro">
+               <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+           </div>
+       </div>
+   </div>
+</div>

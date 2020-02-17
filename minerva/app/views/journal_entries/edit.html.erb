@@ -1,0 +1,41 @@
+<script src="https://kit.fontawesome.com/d4515c3dae.js" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+
+<div class="container-fluid header">
+  <div class="col-md-12">
+      <a href="/home">
+        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
+        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+    </a>
+  </div>
+</div>
+
+<div class="container-fluid create">
+    <div class="row">
+      <%= form_for @journal_entry, as: :journal_entry, url: "/journals/#{@journal_entry.journal_id}/#{@journal_entry.id}?method=PATCH" do |form| %>
+        <p>
+          <%= form.label :title %><br>
+          <%= form.text_field :title %>
+        </p>
+
+        <p>
+          <%= form.label :body %><br>
+          <%= form.text_area :body %>
+        </p>
+
+        <%= form.hidden_field :journal_id %>
+        <%= form.hidden_field :edited, :value => true %>
+
+        <p>
+          <%= form.submit "Update" %>
+        </p>
+      <% end %>
+    </div>
+  <div class="row footer">
+    <div class="col-md-12">
+       <div class="short-intro">
+           <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+       </div>
+     </div>
+   </div>
+</div>
