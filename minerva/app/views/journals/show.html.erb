@@ -4,8 +4,8 @@
 <div class="container-fluid header">
   <div class="col-md-12">
       <a href="/home">
-        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
-        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+        <i class="fas fa-bookmark fa-3x"></i>
+        <span class="header-title"> Minerva</span>
     </a>
   </div>
 </div>
@@ -20,29 +20,93 @@
   <div class="row title-bar">
     <div class="title">
       <%= @journal.name %>
-      <div class="actions new-entry">
+      <div class="new btn">
         <%= link_to 'New Entry', controller: "journal_entries", action: "new", journal_id: @journal.id  %>
       </div>
     </div>
+    <div class="col-md-2 search">
+      <%= form_tag journal_path, method: :get do %>
+      <%= text_field_tag :search, params[:search] %>
+      <%= hidden_field_tag :id, @journal.id %>
+      <%= submit_tag "Search", :class=>'btn btn-sm' %>
+      <% end %>
+    </div>
   </div>
-  <div class="row entries">
+  <div class="row">
     	<% @journal_entries.each do |entry| %>
-          <div class="col-md-12 entry">
-              <h2><%= entry.title %></h2>
+          <div class="col-md-12 panel">
+              <div>
+                <%= link_to entry.title, controller: "journal_entries", action: "show", id: entry.id, journal_id: @journal.id %>
+              </div>
+              <div class="edit">
+                <%= link_to edit_journal_journal_entry_path(id: entry.id, journal_id: entry.journal_id) do %>
+                  <i class="fas fa-edit"></i>
+                <% end %>
+              </div>
+              <div class="delete">
+                <%= link_to "#{entry.id}", :method => 'delete', data: {confirm: "Are you sure?"} do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+              </div>
               <p class="time">Created: <%= entry.created_at.to_time.strftime('%B %e at %l:%M %p') %></p>
               <% if entry.edited %>
                 <p class="time">Updated: <%= entry.updated_at.to_time.strftime('%B %e at %l:%M %p') %></p>
               <% end %>
-              <div class="actions view">
-                  <%= link_to 'View', controller: "journal_entries", action: "show", id: entry.id, journal_id: @journal.id %>
-              </div>
           </div>
   		<% end %>
   </div>
+
+<% if @journal_entries.length > 0 %>
+  <div class="panel chart">
+    <%= select_tag "chart_options", options_for_select(["Past Week", "Past Month", "Past Year"], "Past Week") %>
+    <div id="chart"></div>
+  </div>
+<% else %>
+  <div class="panel">You have no journal entries at this time. Start writing!</div>
+<% end %>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <%= javascript_tag do %>
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+    var chartOptions = document.getElementById('chart_options');
+    chartOptions.addEventListener("change", drawChart);
+
+    function drawChart() {
+      switch(chartOptions.value) {
+        case 'Past Week':
+          var data = JSON.parse('<%= @totals_for_week.to_json.html_safe %>');
+          var xName = 'Days';
+          var titleSuffix = 'week';
+          break;
+        case 'Past Month':
+          var data = JSON.parse('<%= @totals_for_month.to_json.html_safe %>');
+          var xName = 'Days';
+          var titleSuffix = 'month';
+          break;
+        case 'Past Year':
+          var data = JSON.parse('<%= @totals_for_year.to_json.html_safe %>');
+          var xName = 'Months';
+          var titleSuffix = 'year';
+          break;
+      }
+      data = [[xName, 'Count']].concat(data);
+      data = google.visualization.arrayToDataTable(data);
+      var options = {
+        chart: {
+          title: 'Entries for the past ' + titleSuffix,
+        }
+      };
+
+      var chart = new google.charts.Bar(document.getElementById('chart'));
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+  <% end %>
+
   <div class="row footer">
       <div class="col-md-12">
           <div class="short-intro">
-              <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+            <p>Create personal journals with Minerva</p><br>
           </div>
       </div>
   </div>

@@ -4,8 +4,8 @@
 <div class="container-fluid header">
   <div class="col-md-12">
       <a href="/home">
-        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
-        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+        <i class="fas fa-bookmark fa-3x"></i>
+        <span class="header-title"> Minerva</span>
     </a>
   </div>
 </div>
@@ -17,7 +17,7 @@
         Back to <%= @journal.name %>
       <% end %>
     </div>
-    <div class="row entry">
+    <div class="row panel">
       <h1><%= @journal_entry.title %></h1>
   	  <p><%= @journal_entry.body %></p>
       <div class="actions edit">
@@ -38,7 +38,7 @@
     <div class="row footer">
         <div class="col-md-12">
             <div class="short-intro">
-                <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+              <p>Create personal journals with Minerva</p><br>
             </div>
         </div>
     </div>

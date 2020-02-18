@@ -4,28 +4,32 @@
 <div class="container-fluid header">
   <div class="col-md-12">
       <a href="/home">
-        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
-        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+        <i class="fas fa-bookmark fa-3x"></i>
+        <span class="header-title"> Minerva</span>
     </a>
   </div>
 </div>
 
 <div class="container-fluid">
   <div class="row title-bar">
-    <div class="title">
+    <div class="col-md-10 title">
       Journals
-      <div class="col-md-12 actions new-journal">
+      <div class="col-md-2 new btn">
           <%= link_to 'New Journal', "/journals/new" %>
       </div>
     </div>
+    <div class="col-md-2 search">
+      <%= form_tag journals_path, method: :get, id: "search" do %>
+        <%= text_field_tag :search, params[:search] %>
+        <%= submit_tag "Search", :class=>'btn btn-sm' %>
+      <% end %>
+    </div>
   </div>
-    <div class="row journals">
+  <div class="row journals">
   	<% @journals.each do |journal| %>
-        <div class="col-md-12 journal">
+        <div class="col-md-12 panel">
             <div>
-              <%= link_to journal do %>
-                <h1><%= journal.name %></h1>
-              <% end %>
+              <%= link_to journal.name, journal %>
             </div>
 
             <p class="time">Created: <%= journal.created_at.to_time.strftime('%B %e at %l:%M %p') %></p>
@@ -40,7 +44,7 @@
     <div class="row footer">
         <div class="col-md-12">
             <div class="short-intro">
-                <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+              <p>Create personal journals with Minerva</p><br>
             </div>
         </div>
     </div>

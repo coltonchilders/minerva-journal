@@ -4,37 +4,31 @@
 <div class="container-fluid header">
   <div class="col-md-12">
       <a href="/home">
-        <span style="color: #F8B195;"><i class="fas fa-bookmark fa-3x"></i></span>
-        <span style="font-family: 'Comfortaa'; color:white; font-size: 48pt;"> Minerva</span>
+        <i class="fas fa-bookmark fa-3x"></i>
+        <span class="header-title"> Minerva</span>
     </a>
   </div>
 </div>
 
-<div class="container-fluid create">
-    <div class="row">
+<div class="container-fluid">
+    <div class="row panel">
       <%= form_for @journal_entry, as: :journal_entry, url: "/journals/#{@journal_entry.journal_id}/#{@journal_entry.id}?method=PATCH" do |form| %>
-        <p>
-          <%= form.label :title %><br>
-          <%= form.text_field :title %>
-        </p>
+        <%= form.label :title %>
+        <%= form.text_field :title %>
 
-        <p>
-          <%= form.label :body %><br>
-          <%= form.text_area :body %>
-        </p>
+        <%= form.label :body %>
+        <%= form.text_area :body %>
 
         <%= form.hidden_field :journal_id %>
         <%= form.hidden_field :edited, :value => true %>
 
-        <p>
-          <%= form.submit "Update" %>
-        </p>
+        <%= form.submit "Update", class: 'btn' %>
       <% end %>
     </div>
   <div class="row footer">
     <div class="col-md-12">
        <div class="short-intro">
-           <p>Create personal journals with Minerva<br> <a href="/about">Learn more here</a></p><br>
+         <p>Create personal journals with Minerva</p><br>
        </div>
      </div>
    </div>

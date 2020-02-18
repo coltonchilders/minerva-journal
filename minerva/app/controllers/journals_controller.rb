@@ -1,6 +1,10 @@
 class JournalsController < ApplicationController
   def index
-    @journals = Journal.all
+    if params[:search]
+      @journals = Journal.where('name LIKE ?', "%#{params[:search]}%")
+    else
+      @journals = Journal.all
+    end
   end
 
   def new
@@ -25,11 +29,94 @@ class JournalsController < ApplicationController
 
   def show
     @journal = Journal.find(params[:id])
-    @journal_entries = @journal.journal_entries
+    if params[:search]
+      @journal_entries = JournalEntry.where('journal_id = ? AND title LIKE ?', params[:id], "%#{params[:search]}%")
+    else
+      @journal_entries = @journal.journal_entries
+    end
+
+    @totals_for_week = totals_for_week(@journal, @journal_entries)
+    @totals_for_month = totals_for_month(@journal, @journal_entries)
+    @totals_for_year = totals_for_year(@journal, @journal_entries)
   end
 
   private
     def journal_params
-      params.require(:journal).permit(:name)
+      params.require(:journal).permit(:name, :search)
     end
+
+    def totals_for_year(journal, entries)
+      entry_ids = '('
+      entries.each do |e|
+        entry_ids += e.id.to_s + ','
+      end
+      entry_ids[entry_ids.length - 1] = ')'
+
+      date = journal.created_at.to_time.strftime('%Y-%m-%d')
+      JournalEntry.find_by_sql(<<-SQL
+        SELECT
+          strftime('%m', created_at) AS month,
+          count(*) AS count
+        FROM journal_entries
+        WHERE journal_id=#{journal.id} AND created_at >= date(#{date}, '-1 year') AND id IN #{entry_ids}
+        GROUP BY month
+        ORDER BY month
+        SQL
+      ).map do |row|
+        [
+          Date::MONTHNAMES[row['month'].to_i],
+          row['count'],
+        ]
+    end
+  end
+
+  def totals_for_month(journal, entries)
+    entry_ids = '('
+    entries.each do |e|
+      entry_ids += e.id.to_s + ','
+    end
+    entry_ids[entry_ids.length - 1] = ')'
+
+    date = journal.created_at.to_time.strftime('%Y-%m-%d')
+    JournalEntry.find_by_sql(<<-SQL
+      SELECT
+        strftime('%d', created_at) AS day,
+        COUNT(*) AS count
+      FROM journal_entries
+      WHERE journal_id=#{journal.id} AND created_at >= date(#{date}, '-1 month') AND id IN #{entry_ids}
+      GROUP BY day
+      ORDER BY day
+      SQL
+    ).map do |row|
+      [
+        row['day'],
+        row['count'],
+      ]
+    end
+  end
+
+  def totals_for_week(journal, entries)
+    entry_ids = '('
+    entries.each do |e|
+      entry_ids += e.id.to_s + ','
+    end
+    entry_ids[entry_ids.length - 1] = ')'
+
+    date = journal.created_at.to_time.strftime('%Y-%m-%d')
+    JournalEntry.find_by_sql(<<-SQL
+      SELECT
+        strftime('%d', created_at) AS day,
+        COUNT(*) AS count
+      FROM journal_entries
+      WHERE journal_id=#{journal.id} AND created_at >= date(#{date}, '-7 days') AND id IN #{entry_ids}
+      GROUP BY day
+      ORDER BY day
+      SQL
+    ).map do |row|
+      [
+        row['day'],
+        row['count'],
+      ]
+    end
+  end
 end
