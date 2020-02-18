@@ -58,7 +58,7 @@
 
 <% if @journal_entries.length > 0 %>
   <div class="panel chart">
-    <%= select_tag "chart_options", options_for_select(["Past Week", "Past Month", "Past Year"], "Past Week") %>
+    <%= select_tag "chart_options", options_for_select(["Past Week", "Past Month", "Past Year", "All"], "Past Week") %>
     <div id="chart"></div>
   </div>
 <% else %>
@@ -77,24 +77,29 @@
         case 'Past Week':
           var data = JSON.parse('<%= @totals_for_week.to_json.html_safe %>');
           var xName = 'Days';
-          var titleSuffix = 'week';
+          var title = 'Entries for the past week';
           break;
         case 'Past Month':
           var data = JSON.parse('<%= @totals_for_month.to_json.html_safe %>');
           var xName = 'Days';
-          var titleSuffix = 'month';
+          var title = 'Entries for the past month';
           break;
         case 'Past Year':
           var data = JSON.parse('<%= @totals_for_year.to_json.html_safe %>');
           var xName = 'Months';
-          var titleSuffix = 'year';
+          var title = 'Entries for the past year';
+          break;
+        case 'All':
+          var data = JSON.parse('<%= @totals.to_json.html_safe %>');
+          var xName = 'Months';
+          var title = 'All entries';
           break;
       }
       data = [[xName, 'Count']].concat(data);
       data = google.visualization.arrayToDataTable(data);
       var options = {
         chart: {
-          title: 'Entries for the past ' + titleSuffix,
+          title: title,
         }
       };
 

@@ -38,12 +38,37 @@ class JournalsController < ApplicationController
     @totals_for_week = totals_for_week(@journal, @journal_entries)
     @totals_for_month = totals_for_month(@journal, @journal_entries)
     @totals_for_year = totals_for_year(@journal, @journal_entries)
+    @totals = totals(@journal, @journal_entries)
   end
 
   private
     def journal_params
       params.require(:journal).permit(:name, :search)
     end
+
+    def totals(journal, entries)
+      entry_ids = '('
+      entries.each do |e|
+        entry_ids += e.id.to_s + ','
+      end
+      entry_ids[entry_ids.length - 1] = ')'
+
+      JournalEntry.find_by_sql(<<-SQL
+        SELECT
+          strftime('%m', created_at) AS month,
+          count(*) AS count
+        FROM journal_entries
+        WHERE journal_id=#{journal.id} AND id IN #{entry_ids}
+        GROUP BY month
+        ORDER BY month
+        SQL
+      ).map do |row|
+        [
+          Date::MONTHNAMES[row['month'].to_i],
+          row['count'],
+        ]
+    end
+  end
 
     def totals_for_year(journal, entries)
       entry_ids = '('
